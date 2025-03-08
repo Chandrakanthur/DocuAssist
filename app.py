@@ -1,25 +1,15 @@
 import streamlit as st
-import base64
 
-def set_background(image_file):
-    """Sets the background of the Streamlit app."""
-    with open(image_file, "rb") as f:
-        img_data = f.read()
-    b64_encoded_string = base64.b64encode(img_data).decode()
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url(data:image/png;base64,{b64_encoded_string});
-            background-size: cover;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Set the background image
-set_background("background.png")  # Replace with your image file
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #f0f2f6;  /* Light gray background */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 st.title("Simple File Uploader")
 

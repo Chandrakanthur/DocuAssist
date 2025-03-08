@@ -3,10 +3,7 @@ from document_loader import extract_text_from_pdf, extract_text_from_docx
 from summarization import summarize_text
 import os
 
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
+
     
 st.markdown(
     """

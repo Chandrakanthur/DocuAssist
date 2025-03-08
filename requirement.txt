@@ -1,2 +1,2 @@
 streamlit
-PyPDF2==2.12.1
+pymupdf

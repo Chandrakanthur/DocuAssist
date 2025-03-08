@@ -1,5 +1,5 @@
 import streamlit as st
-from text_processing import extract_text, clean_text
+from document_process import extract_text, clean_text
 from summarizer import summarize_text
 
 # Streamlit UI

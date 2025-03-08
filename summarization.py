@@ -1,19 +1,24 @@
 import re
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
 stopwords = set(stopwords.words('english'))
 
 def clean_text(text):
-    text = re.sub(r'[^\w\s]', '', text) # remove punctuation
-    text = re.sub(r'\d+', '', text) # remove numbers
+    text = re.sub(r'[^\w\s]', '', text)
+    text = re.sub(r'\d+', '', text)
     text = text.lower()
     tokens = word_tokenize(text)
     tokens = [word for word in tokens if word not in stopwords]
     return tokens
 
+def split_sentences(text):
+    """Splits the text into sentences using a simple regex."""
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text)
+    return [sentence.strip() for sentence in sentences if sentence.strip()]
+
 def summarize_text(text, num_sentences=3):
-    sentences = sent_tokenize(text)
+    sentences = split_sentences(text) # Use the custom sentence splitter.
     if not sentences:
         return "No sentences to summarize."
 

@@ -1,42 +1,30 @@
-import fitz  # PyMuPDF
-from docx import Document
-from langdetect import detect, LangDetectException
+import fitz  # PyMuPDF for PDFs
+import docx
+import re
+import spacy
 
-def is_english(text):
-    """Checks if the given text is in English."""
-    try:
-        return detect(text) == 'en'
-    except LangDetectException:
-        return False  # Return False if language cannot be detected
+# Load NLP model
+nlp = spacy.load("en_core_web_sm")
 
-def extract_text_from_pdf(pdf_path):
-    """Extracts English text from a PDF file using PyMuPDF."""
-    try:
-        with fitz.open(pdf_path) as pdf_document:
-            text = ""
-            for page_num in range(pdf_document.page_count):
-                page = pdf_document.load_page(page_num)
-                page_text = page.get_text()
-                lines = page_text.splitlines()
-                for line in lines:
-                    if is_english(line.strip()):
-                        text += line + "\n"
-            return text
-    except FileNotFoundError:
-        return "Error: PDF file not found."
-    except Exception as e:
-        return f"Error: An error occurred while processing PDF: {e}"
+def extract_text(file, file_type):
+    """Extracts text from a PDF or DOCX file."""
+    if file_type == "pdf":
+        return extract_text_from_pdf(file)
+    elif file_type == "docx":
+        return extract_text_from_docx(file)
 
-def extract_text_from_docx(docx_path):
-    """Extracts English text from a .docx file."""
-    try:
-        doc = Document(docx_path)
-        full_text = []
-        for para in doc.paragraphs:
-            if is_english(para.text.strip()):
-                full_text.append(para.text)
-        return "\n".join(full_text)
-    except FileNotFoundError:
-        return "Error: .docx file not found."
-    except Exception as e:
-        return f"Error: An error occurred while processing .docx: {e}"
+def extract_text_from_pdf(pdf_file):
+    """Extracts text from a PDF file."""
+    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    return "\n".join([page.get_text("text") for page in doc])
+
+def extract_text_from_docx(docx_file):
+    """Extracts text from a DOCX file."""
+    doc = docx.Document(docx_file)
+    return "\n".join([para.text for para in doc.paragraphs])
+
+def clean_text(text):
+    """Cleans text by removing special characters, extra spaces, and stopwords."""
+    text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
+    doc = nlp(text)
+    return " ".join([token.lemma_ for token in doc if not token.is_stop and token.is_alpha])

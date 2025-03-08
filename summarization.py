@@ -1,5 +1,4 @@
 import re
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
 stopwords = set(stopwords.words('english'))
@@ -8,7 +7,7 @@ def clean_text(text):
     text = re.sub(r'[^\w\s]', '', text)
     text = re.sub(r'\d+', '', text)
     text = text.lower()
-    tokens = word_tokenize(text)
+    tokens = re.findall(r'\w+', text) # Simple regex word tokenization
     tokens = [word for word in tokens if word not in stopwords]
     return tokens
 
@@ -17,7 +16,7 @@ def split_sentences(text):
     return [sentence.strip() for sentence in sentences if sentence.strip()]
 
 def summarize_text(text, num_sentences=3):
-    sentences = split_sentences(text) # Use the custom sentence splitter.
+    sentences = split_sentences(text)
     if not sentences:
         return "No sentences to summarize."
 
@@ -29,7 +28,7 @@ def summarize_text(text, num_sentences=3):
 
     sentence_scores = {}
     for sentence in sentences:
-        tokens = word_tokenize(sentence)
+        tokens = clean_text(sentence) #use clean_text that is using regex
         for token in tokens:
             if token in word_frequencies:
                 sentence_scores[sentence] = sentence_scores.get(sentence, 0) + word_frequencies[token]

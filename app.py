@@ -1,7 +1,7 @@
 import streamlit as st
 from document_loader import extract_text_from_pdf, extract_text_from_docx
+from summarization import summarize_text
 import os
-
 
 st.markdown(
     """
@@ -38,7 +38,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("DocuAssit (PDF & .docx)")
+st.title("Document Summarizer (PDF & .docx)")
 
 uploaded_file = st.file_uploader("Upload a PDF or .docx file", type=["pdf", "docx"])
 
@@ -46,15 +46,16 @@ if uploaded_file is not None:
     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
     temp_file_path = f"temp{file_extension}"
 
-    # Save the uploaded file to a temporary location
     with open(temp_file_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
 
     if file_extension == ".pdf":
-        extracted_text = extract_text_from_pdf(temp_file_path)
+        text = extract_text_from_pdf(temp_file_path)
     elif file_extension == ".docx":
-        extracted_text = extract_text_from_docx(temp_file_path)
+        text = extract_text_from_docx(temp_file_path)
     else:
-        extracted_text = "Error: Unsupported file type."
+        text = "Error: Unsupported file type."
 
-    st.write(extracted_text)
+    summary = summarize_text(text)
+    st.subheader("Summary:")
+    st.write(summary)

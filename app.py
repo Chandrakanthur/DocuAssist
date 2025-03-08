@@ -1,5 +1,9 @@
 import streamlit as st
-import fitz
+from io import BytesIO
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
+from pdfminer.pdfpage import PDFPage
 
 st.markdown(
     """

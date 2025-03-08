@@ -40,7 +40,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("Document Summarizer (PDF & .docx)")
+st.title("DocuAssist (PDF & .docx)")
 
 uploaded_file = st.file_uploader("Upload a PDF or .docx file", type=["pdf", "docx"])
 

@@ -38,7 +38,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("Document Text Extractor (PDF & .docx)")
+st.title("DocuAssit (PDF & .docx)")
 
 uploaded_file = st.file_uploader("Upload a PDF or .docx file", type=["pdf", "docx"])
 

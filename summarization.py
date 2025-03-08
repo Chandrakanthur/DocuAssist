@@ -13,7 +13,6 @@ def clean_text(text):
     return tokens
 
 def split_sentences(text):
-    """Splits the text into sentences using a simple regex."""
     sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text)
     return [sentence.strip() for sentence in sentences if sentence.strip()]
 

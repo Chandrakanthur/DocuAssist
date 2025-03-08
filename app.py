@@ -1,9 +1,5 @@
 import streamlit as st
-from io import BytesIO
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
-from pdfminer.pdfpage import PDFPage
+from docx import Document
 
 st.markdown(
     """

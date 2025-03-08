@@ -1,14 +1,32 @@
 import streamlit as st
-from document_loader import extract_text_from_pdf
+import base64
 
-st.title("Simple Document Reader")
+def set_background(image_file):
+    """Sets the background of the Streamlit app."""
+    with open(image_file, "rb") as f:
+        img_data = f.read()
+    b64_encoded_string = base64.b64encode(img_data).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url(data:image/png;base64,{b64_encoded_string});
+            background-size: cover;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
-uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
+# Set the background image
+set_background("background.png")  # Replace with your image file
+
+st.title("Simple File Uploader")
+
+uploaded_file = st.file_uploader("Upload a file")
 
 if uploaded_file is not None:
-    # Save the uploaded file to a temporary location
-    with open("temp.pdf", "wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-    extracted_text = extract_text_from_pdf("temp.pdf")
-    st.write(extracted_text)
+    st.write("File uploaded successfully!")
+    st.write("File name:", uploaded_file.name)
+    st.write("File type:", uploaded_file.type)
+    st.write("File size:", len(uploaded_file.getvalue()))
